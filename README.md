@@ -1,15 +1,15 @@
-#push_swap_tester
+# Push_swap_tester
 Simple input, output and memory leak tester for 42 project push_swap
 #Bash Script for Testing Push_Swap
 This repository contains a bash script for testing a push_swap program, in combination with a checker file.
 Include it in your Makefile for combining with multiple tests.
 
-#Prerequisites
+# Prerequisites
 Bash shell
 Push_Swap program
 Checker program
 
-#Usage
+# Usage
 Run the tester.sh script with the following command:
 
 ```
@@ -41,6 +41,6 @@ Output: OK
 Valgrind: OK
 ```
 
-#Note
+# Note
 This bash script only works in combination with a checker file. Please ensure that the checker program is in the same directory as the push_swap program before running the script.
 
