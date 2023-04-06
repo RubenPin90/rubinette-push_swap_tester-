@@ -15,14 +15,14 @@ Run the tester.sh script with the following command:
 ```
 ./test_push_swap.sh <min> <max> <count> [<flags>] [<type>]
 ```
-* <min>: the minimum value for the random number generator.
-* <max>: the maximum value for the random number generator.
-* <count>: the number of random numbers to generate.
-* <flags> (optional): the test flags to use:
+* 'min': the minimum value for the random number generator.
+* 'max': the maximum value for the random number generator.
+* 'count': the number of random numbers to generate.
+* 'flags' (optional): the test flags to use:
 * 1: add a non-valid character.
 * 2: add a number outside of the range.
 * 3: add a duplicate number.
-* <type> (optional): the input type to use:
+* 'type' (optional): the input type to use:
 * 1: input as a single string.
 * 2: input as two strings.
 
