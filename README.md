@@ -26,10 +26,10 @@ Run the tester.sh script with the following command:
     - 1: input as a single string.
     - 2: input as two strings.
 
-For example, to test push_swap with a range of -100 to 100, generating 500 random numbers, and adding a non-valid character flag, you would use the following command:
+For example, to test push_swap with a range of -100 to 100, generating 150 random numbers, and adding a non-valid character flag, you would use the following command:
 
 ```
-./test_push_swap.sh -100 100 500 1
+./test_push_swap.sh -100 100 150 1
 ```
 Output
 The script generates random numbers within the given range and tests the push_swap program with them. The output displays whether the push_swap program output is correct or not.
