@@ -19,12 +19,12 @@ Run the tester.sh script with the following command:
 * 'max': the maximum value for the random number generator.
 * 'count': the number of random numbers to generate.
 * 'flags' (optional): the test flags to use:
-    1: add a non-valid character.
-    2: add a number outside of the range.
-    3: add a duplicate number.
+    - 1: add a non-valid character.
+    - 2: add a number outside of the range.
+    - 3: add a duplicate number.
 * 'type' (optional): the input type to use:
-    1: input as a single string.
-    2: input as two strings.
+    - 1: input as a single string.
+    - 2: input as two strings.
 
 For example, to test push_swap with a range of -100 to 100, generating 500 random numbers, and adding a non-valid character flag, you would use the following command:
 
