@@ -5,9 +5,9 @@ This repository contains a bash script for testing a push_swap program, in combi
 Include it in your Makefile for combining with multiple tests.
 
 # Prerequisites
-Bash shell
-Push_Swap program
-Checker program
++ Bash shell
++ Push_Swap program
++ Checker program
 
 # Usage
 Run the tester.sh script with the following command:
