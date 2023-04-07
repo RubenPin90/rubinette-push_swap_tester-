@@ -6,14 +6,21 @@ The bash script checks the input, output, and memory leaks for your push_swap pr
 
 To use this tester, run
 ```
-./test_push_swap.sh 	<min_value> 	<max_value> 	<numbers_to_generate>
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/hu8813/push_swap_tester/master/tester.sh)" 	<min_value> 	<max_value> 	<numbers_to_generate>
 ```
+or
+```
+./tester.sh 	<min_value> 	<max_value> 	<numbers_to_generate>
+```
+OPTIONAL Arguments: 
+*minimum value, *maximum value, and *number of random numbers to generate.
+
+
 For example, to test push_swap with a range of -100 to 100, generating 150 random numbers, and testing for non-valid characters, use the command:
 
 ```
-./test_push_swap.sh -100 100 150
+./tester.sh -100 100 150
 ```
-*minimum value, *maximum value, and *number of random numbers to generate.
 
 
 Output
