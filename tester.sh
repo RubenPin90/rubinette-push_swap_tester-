@@ -14,7 +14,7 @@ usage=${YELLOW}"Push_swap_tester\nUsage:"${RESET}"
 if [ "$(uname -s)" = "Linux" ]; then
     checker="./checker_linux"
 else
-    checker="./checker_mac"
+    checker="./checker_Mac"
 fi
 
 # Check if push_swap exists
@@ -94,7 +94,7 @@ function run_test() {
     if [ "$typ" -eq 2 ]; then 
         group1=($(echo "${numbers[@]}" | cut -d' ' -f -$((count/2))))
         group2=($(echo "${numbers[@]}" | cut -d' ' -f $(((count/2)+1))-))
-        output_desired="$(echo sa | ${checker} $numbers[*] 2>&1)"
+        output_desired="$(echo sa | ${checker} $group1[@] $group2[*] 2>&1)"
 
         #Uncomment the following line to output used arguments:
         echo -e ${YELLOW}"./push_swap ${group1[@]} \"${group2[*]}\""${RESET}
