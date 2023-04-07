@@ -1,50 +1,49 @@
 #!/bin/bash
 
-# Parse command line arguments
+# **************************************************************************** #
+# Set variables
 GREEN="\033[32m"
 YELLOW="\033[33m"
 RED="\033[31m"
 RESET="\033[0m"
-
-usage=${YELLOW}"Push_swap_tester\n"${RESET}"
-Usage:
+usage=${YELLOW}"Push_swap_tester\nUsage:"${RESET}"
       ./tester <min_value> <max_value> <numbers_to_generate>
       *optional arguments
 "
-if ! [ -e ./push_swap ]; then
-  echo "Error: ./push_swap file not found"
-  echo -e $usage   
-  exit 1
-fi
-
-# Check range
-if [ "$min" -gt "$max" ]; then
-    echo "Error: min is greater than max"
-    exit 1
-fi
-
+# Set checker
 if [ "$(uname -s)" = "Linux" ]; then
     checker="./checker_linux"
 else
     checker="./checker_mac"
 fi
 
+# Check if push_swap exists
+if ! [ -e ./push_swap ]; then
+  echo "Error: ./push_swap file not found"
+  echo -e $usage   
+  exit 1
+fi
+
+# Check if checker exists
 if ! [ -e ${checker} ]; then
   echo "Error: ${checker} file not found"
   echo -e $usage   
   exit 1
 fi
 
+# Check argument range
+if [ "$min" -gt "$max" ]; then
+  echo "Error: min is greater than max"
+  exit 1
+fi
+
 min=$((10#${1:-1}))
 max=$((10#${2:-1000}))
 count=$((10#${3:-10}))
-
-echo "Min: $min" "Max: $max" "Count: $count"
-
 INT_MIN=-2147483648
 INT_MAX=2147483647
 
-
+echo "Min: $min" "Max: $max" "Count: $count"
 
 function run_test() {
     # Generate random numbers
