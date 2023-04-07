@@ -1,18 +1,28 @@
 #!/bin/bash
 
 # Parse command line arguments
-if [ $# -lt 3 ]; then
-    echo "Usage: $0 <min> <max> <count> [<flags>] [<type>]"
-    echo "Flags: 1 = add non-valid char, 2 = add number outside range, 3 = add duplicate"
-	echo "Type: 1 = args as one string, 2 = args as string & individual"
-    exit 1
+if ! [ -e ./push_swap ]; then
+  echo "Error: ./push_swap file not found"
+  echo "Push_swap_tester
+Usage:
+      $0 <min_value> <max_value> <numbers_to_generate>
+"
 fi
 
-min=$1
-max=$2
-count=$3
-flag=${4:-0}
-typ=${5:-0}
+if ! [ -e ./checker_linux ]; then
+  echo "Error: ./checker_linux file not found"
+  echo "Push_swap_tester
+Usage:
+      $0 <min_value> <max_value> <numbers_to_generate>
+"
+fi
+
+min=$((10#${1:-1}))
+max=$((10#${2:-1000}))
+count=$((10#${3:-10}))
+
+echo "Min: $min" "Max: $max" "Count: $count"
+
 INT_MIN=-2147483648
 INT_MAX=2147483647
 
@@ -37,65 +47,75 @@ for ((i=0; i<count; i++)); do
     done
     numbers+=("$num")
 done
+echo ${numbers[@]}
+original_numbers=("${numbers[@]}")
+
+function run_test() {
+    input=("$1")
+    output_desired="$2"
+    echo -e "${YELLOW}Testing: $3${RESET}"
+    echo "Numbers:" ${input[@]}
+    output_new="$(echo -e "$input" | ./push_swap "$input"  | ./checker_linux "$input" 2>&1)"
+
+    # Check output
+    if [ "$output_new" = "$output_desired" -o "$output_new" = "OK" ]; then
+        echo -e "\t\t\t\tOutput:\t\t"${GREEN}"OK"${RESET}
+    else
+        echo -e "\t\t\t\tOutput:\t\t"${RED}"KO"${RESET}
+    fi
+
+    # Check Valgrind
+    valgrind_output="$(echo -e "$input" | valgrind --leak-check=full --error-exitcode=1 ./push_swap 2>&1)"
+    if echo "$valgrind_output" | grep -q "in use at exit: 0 bytes"; then
+        echo -e "\t\t\t\tValgrind:\t"${GREEN}"OK"${RESET}
+    else
+        echo -e "\t\t\t\tValgrind:\t"${RED}"KO"${RESET}
+        echo "$valgrind_output" | grep --color -A2 "in use at exit"
+    fi
+}
 
 # Add non-valid character
-if [ "$flag" -eq 1 ]; then
-    index=$((RANDOM % count))
-    numbers[$index]='u'
-	output_desired="Error"
-fi
+index=$((RANDOM % count))
+numbers[$index]='u'
+output_desired="Error"
+run_test "${numbers[*]}" "$output_desired" "non-valid character"
+numbers=("${original_numbers[@]}")
 
 # Add number outside range
-if [ "$flag" -eq 2 ]; then
-    index=$((RANDOM % count))
-    num=$((RANDOM % 2))
-    if [ $num -eq 0 ]; then
-        num=$((INT_MAX + 1 + RANDOM))
-    else
-        num=$((INT_MIN - 1 - RANDOM))
-    fi
-    numbers[$index]=$num
-	output_desired="Error"
+index=$((RANDOM % count))
+num=$((RANDOM % 2))
+if [ $num -eq 0 ]; then
+    num=$((INT_MAX + 1 + RANDOM))
+else
+    num=$((INT_MIN - 1 - RANDOM))
 fi
+numbers[$index]=$num
+output_desired="Error"
+run_test "${numbers[*]}" "$output_desired" "number outside range"
+numbers=("${original_numbers[@]}")
 
 # Add duplicate number
-if [ "$flag" -eq 3 ]; then
-    index1=$((RANDOM % count))
-    index2=$((RANDOM % count))
-    numbers[$index1]=${numbers[$index2]}
-	output_desired="Error"
-fi
+index1=$((RANDOM % count))
+index2=$((RANDOM % count))
+numbers[$index1]=${numbers[$index2]}
+output_desired="Error"
+run_test "${numbers[*]}" "$output_desired" "duplicate number"
+numbers=("${original_numbers[@]}")
 
 # Adjust input (multiple arguments, string or mixed)
-if [ "$typ" -eq 2 ]; then 
-	group1=($(echo "${numbers[@]}" | cut -d' ' -f -$((count/2))))
-	group2=($(echo "${numbers[@]}" | cut -d' ' -f $(((count/2)+1))-))
-	output_desired="Error"
-	#Uncomment the following line to output used arguments:
-	#echo -e ${YELLOW}"./push_swap ${group1[@]} \"${group2[*]}\""${RESET}
-	echo $(valgrind --log-file=testfile ./push_swap "${group1[@]}" "${group2[*]}" > /dev/null)
-	output_new=$(./push_swap "${group1[@]}" "${group2[*]}" | ./checker "${group1[@]}" "${group2[*]}" 2>&1)
-elif [ "$typ" -eq 1 ]; then 
-	#Uncomment the following line to output used arguments:
-	#echo -e ${YELLOW}"./push_swap \"${numbers[*]}\""${RESET}
-	echo $(valgrind --log-file=testfile ./push_swap "${numbers[*]}" > /dev/null)
-	output_new=$(./push_swap "${numbers[*]}" | ./checker "${numbers[*]}" 2>&1)
-else 
-	#Uncomment the following line to output used arguments:
-	#echo -e ${YELLOW}"./push_swap ${numbers[@]}"${RESET}
-	echo $(valgrind --log-file=testfile ./push_swap "${numbers[@]}" > /dev/null)
-	output_new=$(./push_swap "${numbers[@]}" | ./checker "${numbers[@]}" 2>&1)
-fi
+group1=($(echo "${numbers[@]}" | cut -d' ' -f -$((count/2))))
+group2=($(echo "${numbers[@]}" | cut -d' ' -f $(((count/2)+1))-))
+output_desired="Error"
+run_test "${group1[*]} ${group2[*]}" "$output_desired" "multiple arguments"
 
-#Uncomment the following line to show checker result:
-#echo ${output_new}
+echo $(valgrind --log-file=testfile ./push_swap "${group1[@]}" "${group2[*]}" > /dev/null)
+output_new=$(./push_swap "${group1[@]}" "${group2[*]}" | ./checker "${group1[@]}" "${group2[*]}" 2>&1)
+run_test "${group1[*]} ${group2[*]}" "$output_desired" "multiple arguments"
 
-# Print Checks
-if [ "$output_new" = "$output_desired" -o "$output_new" = "OK" ]; then
-	echo -e "Output:\t\t"${GREEN}"OK"${RESET}
-else
-	echo -e "Output:\t\t"${RED}"KO"${RESET}
-fi
-echo -e "Valgrind:\t"$(awk '/in use at exit: 0 bytes/{f=1; printf "'"${GREEN}"'OK'"${RESET}"'\n"; exit} /in use at exit:/{f=1; printf "'"${RED}"'KO'"${RESET}"'\n"; exit} END{if(!f) printf "'"${RED}"'KO'"${RESET}"'\n"}' testfile)
-#Uncomment the following line to see valgrind results:
-#cat testfile | grep --color -A2 "in use at exit"
+echo -e "\t\t\t " $(valgrind --log-file=testfile ./push_swap "${numbers[*]}" > /dev/null)
+output_new=$(./push_swap "${numbers[*]}" | ./checker "${numbers[*]}" 2>&1)
+run_test "${numbers[*]}" "$output_desired" "string"
+
+echo -e "\t\t\t " $(valgrind --log-file=testfile ./push_swap "${numbers[@]}" > /dev/null)
+output_new=$(./push_swap "${numbers[@]}" | ./checker "${numbers[@]}" 2>&1)
+run_test "${numbers[*]}" "$output_desired" "mixed"
