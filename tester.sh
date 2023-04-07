@@ -1,12 +1,19 @@
 #!/bin/bash
 
 # Parse command line arguments
+GREEN="\033[32m"
+YELLOW="\033[33m"
+RED="\033[31m"
+RESET="\033[0m"
+
+usage=${YELLOW}"Push_swap_tester\n"${RESET}"
+Usage:
+      ./tester <min_value> <max_value> <numbers_to_generate>
+      *optional arguments
+"
 if ! [ -e ./push_swap ]; then
   echo "Error: ./push_swap file not found"
-  echo "Push_swap_tester
-Usage:
-      $0 <min_value> <max_value> <numbers_to_generate>
-"
+  echo $usage   
   exit 1
 fi
 
@@ -24,10 +31,7 @@ fi
 
 if ! [ -e ${checker} ]; then
   echo "Error: ${checker} file not found"
-  echo "Push_swap_tester
-Usage:
-      $0 <min_value> <max_value> <numbers_to_generate>
-"
+  echo $usage   
   exit 1
 fi
 
@@ -40,10 +44,7 @@ echo "Min: $min" "Max: $max" "Count: $count"
 INT_MIN=-2147483648
 INT_MAX=2147483647
 
-GREEN="\033[32m"
-YELLOW="\033[33m"
-RED="\033[31m"
-RESET="\033[0m"
+
 
 function run_test() {
     # Generate random numbers
