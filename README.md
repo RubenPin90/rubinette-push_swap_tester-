@@ -4,11 +4,12 @@ The bash script checks the input, output, and memory leaks for your push_swap pr
 
 ## Usage
 
-To use this tester, run
+To use this tester, run:
 ```
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/RubenPin90/push_swap_tester/master/tester.sh)" 	<min_value> 	<max_value> 	<numbers_to_generate>
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/RubenPin90/push_swap_tester/master/tester.sh)" 
 ```
-or
+or clone/copy the tester.sh
+
 ```
 ./tester.sh 	<min_value> 	<max_value> 	<numbers_to_generate>
 ```
