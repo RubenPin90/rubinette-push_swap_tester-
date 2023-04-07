@@ -41,6 +41,7 @@ if ! [ -e ${checker} ]; then
 Usage:
       $0 <min_value> <max_value> <numbers_to_generate>
 "
+exit 1
 fi
 
 function run_test() {
