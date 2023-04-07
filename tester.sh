@@ -7,6 +7,7 @@ if ! [ -e ./push_swap ]; then
 Usage:
       $0 <min_value> <max_value> <numbers_to_generate>
 "
+  exit 1
 fi
 
 min=$((10#${1:-1}))
