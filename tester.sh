@@ -10,20 +10,6 @@ Usage:
   exit 1
 fi
 
-min=$((10#${1:-1}))
-max=$((10#${2:-1000}))
-count=$((10#${3:-10}))
-
-echo "Min: $min" "Max: $max" "Count: $count"
-
-INT_MIN=-2147483648
-INT_MAX=2147483647
-
-GREEN="\033[32m"
-YELLOW="\033[33m"
-RED="\033[31m"
-RESET="\033[0m"
-
 # Check range
 if [ "$min" -gt "$max" ]; then
     echo "Error: min is greater than max"
@@ -44,6 +30,20 @@ Usage:
 "
   exit 1
 fi
+
+min=$((10#${1:-1}))
+max=$((10#${2:-1000}))
+count=$((10#${3:-10}))
+
+echo "Min: $min" "Max: $max" "Count: $count"
+
+INT_MIN=-2147483648
+INT_MAX=2147483647
+
+GREEN="\033[32m"
+YELLOW="\033[33m"
+RED="\033[31m"
+RESET="\033[0m"
 
 function run_test() {
     # Generate random numbers
