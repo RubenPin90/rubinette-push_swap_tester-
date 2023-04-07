@@ -6,7 +6,7 @@ The bash script checks the input, output, and memory leaks for your push_swap pr
 
 To use this tester, run
 ```
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/hu8813/push_swap_tester/master/tester.sh)" 	<min_value> 	<max_value> 	<numbers_to_generate>
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/RubenPin90/push_swap_tester/master/tester.sh)" 	<min_value> 	<max_value> 	<numbers_to_generate>
 ```
 or
 ```
