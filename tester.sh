@@ -13,7 +13,7 @@ Usage:
 "
 if ! [ -e ./push_swap ]; then
   echo "Error: ./push_swap file not found"
-  echo $usage   
+  echo -e $usage   
   exit 1
 fi
 
@@ -31,7 +31,7 @@ fi
 
 if ! [ -e ${checker} ]; then
   echo "Error: ${checker} file not found"
-  echo $usage   
+  echo -e $usage   
   exit 1
 fi
 
