@@ -31,17 +31,17 @@ if ! [ -e ${checker} ]; then
   exit 1
 fi
 
-# Check argument range
-if [ "$min" -gt "$max" ]; then
-  echo "Error: min is greater than max"
-  exit 1
-fi
-
 min=$((10#${1:-1}))
 max=$((10#${2:-1000}))
 count=$((10#${3:-10}))
 INT_MIN=-2147483648
 INT_MAX=2147483647
+
+# Check argument range
+if [ "$min" -gt "$max" ]; then
+  echo "Error: min is greater than max"
+  exit 1
+fi
 
 echo "Min: $min" "Max: $max" "Count: $count"
 
@@ -59,16 +59,48 @@ function run_test() {
         numbers+=("$num")
     done
 
-    # Add non-valid character
+    # Empty argument
     if [ "$flag" -eq 1 ]; then
+        numbers=()
+        output_desired="$(echo sa | ${checker} $numbers[*] 2>&1)"
+    fi
+
+    # No arguments
+    if [ "$flag" -eq 11 ]; then
+        numbers=()
+        output_desired="$(echo sa | ${checker} 2>&1)"
+    fi
+
+    # Add non-valid char
+    if [ "$flag" -eq 2 ]; then
         index=$((RANDOM % count))
         numbers[$index]='u'
         output_desired="$(echo sa | ${checker} $numbers[*] 2>&1)"
+    fi
 
+    # Add minus as argument  
+    if [ "$flag" -eq 3 ]; then
+        index=$((RANDOM % count))
+        numbers[$index]='-'
+        output_desired="$(echo sa | ${checker} $numbers[*] 2>&1)"
+    fi
+
+    # Add plus as argument
+    if [ "$flag" -eq 4 ]; then
+        index=$((RANDOM % count))
+        numbers[$index]='+'
+        output_desired="$(echo sa | ${checker} $numbers[*] 2>&1)"
+    fi
+
+    # Add non-valid number
+    if [ "$flag" -eq 5 ]; then
+        index=$((RANDOM % count))
+        numbers[$index]='90-'
+        output_desired="$(echo sa | ${checker} $numbers[*] 2>&1)"
     fi
 
     # Add number outside range
-    if [ "$flag" -eq 2 ]; then
+    if [ "$flag" -eq 6 ]; then
         index=$((RANDOM % count))
         num=$((RANDOM % 2))
         if [ $num -eq 0 ]; then
@@ -78,16 +110,14 @@ function run_test() {
         fi
         numbers[$index]=$num
         output_desired="$(echo sa | ${checker} $numbers[*] 2>&1)"
-
     fi
 
     # Add duplicate number
-    if [ "$flag" -eq 3 ]; then
+    if [ "$flag" -eq 7 ]; then
         index1=$((RANDOM % count))
         index2=$((RANDOM % count))
         numbers[$index1]=${numbers[$index2]}
         output_desired="$(echo sa | ${checker} $numbers[*] 2>&1)"
-
     fi
 
     # Adjust input (multiple arguments, string or mixed)
@@ -126,17 +156,29 @@ function run_test() {
     if ! grep -q "in use at exit: 0" testfile; then
         cat testfile | grep --color -A2 "in use at exit"
     fi
+    echo -e "\n"
 }
 
 run_test 0 0
 run_test 0 1
 run_test 0 2
-run_test 1 0
+run_test 11 0
 run_test 1 1
-run_test 1 2
 run_test 2 0
 run_test 2 1
 run_test 2 2
 run_test 3 0
 run_test 3 1
 run_test 3 2
+run_test 4 0
+run_test 4 1
+run_test 4 2
+run_test 5 0
+run_test 5 1
+run_test 5 2
+run_test 6 0
+run_test 6 1
+run_test 6 2
+run_test 7 0
+run_test 7 1
+run_test 7 2
