@@ -1,5 +1,5 @@
 
-# Push_swap_tester
+# Rubinette (Push_swap_tester)
 The bash script checks the input, output, and memory leaks for your push_swap program. You need to run the program in the directory where your push_swap and checker_linux program are.
 
 ## Usage
